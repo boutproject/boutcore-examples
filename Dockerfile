@@ -20,3 +20,5 @@ WORKDIR ${HOME}
 USER ${USER}
 
 ADD https://raw.githubusercontent.com/boutproject/BOUT-dev/next/examples/boutcore/blob2d.py ${HOME}
+RUN chown ${USER} ${HOME} -R
+
