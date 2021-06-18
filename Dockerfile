@@ -17,7 +17,7 @@ RUN adduser --create-home \
     --home-dir ${HOME} \
     ${NB_USER}
 
-ADD https://raw.githubusercontent.com/boutproject/BOUT-dev/next/examples/boutcore/blob2d.py /
+ADD https://raw.githubusercontent.com/boutproject/BOUT-dev/master/examples/boutcore/blob2d.py /
 RUN mv /blob2d.py ${HOME}
 RUN whoami
 RUN ls -la ${HOME}
