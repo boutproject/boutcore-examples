@@ -18,7 +18,8 @@ RUN adduser --create-home \
     ${NB_USER}
 
 ADD https://raw.githubusercontent.com/boutproject/BOUT-dev/master/examples/boutcore/blob2d.py /
-RUN mv /blob2d.py ${HOME}
+ADD simulation.ipynb /
+RUN mv /blob2d.py /simulation.ipynb ${HOME}
 RUN chown ${USER} ${HOME} -R
 WORKDIR ${HOME}
 USER ${USER}
