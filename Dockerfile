@@ -19,4 +19,4 @@ RUN adduser --create-home \
 WORKDIR ${HOME}
 USER ${USER}
 
-COPY https://github.com/boutproject/BOUT-dev/blob/next/examples/boutcore/blob2d.py ${HOME}
+ADD https://raw.githubusercontent.com/boutproject/BOUT-dev/next/examples/boutcore/blob2d.py ${HOME}
