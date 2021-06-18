@@ -11,9 +11,10 @@ ENV HOME /home/${NB_USER}
 # setup mpi
 ENV PYTHONPATH=/usr/lib64/python3.9/site-packages/openmpi
 
-RUN adduser --disabled-password \
-    --gecos "Default user" \
+RUN adduser --create-home \
+    --comment "Default user" \
     --uid ${NB_UID} \
+    --home-dir ${HOME} \
     ${NB_USER}
 WORKDIR ${HOME}
 USER ${USER}
