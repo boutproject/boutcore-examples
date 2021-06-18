@@ -17,6 +17,7 @@ RUN adduser --create-home \
     --home-dir ${HOME} \
     ${NB_USER}
 
+RUN echo 'please update the files'
 ADD https://raw.githubusercontent.com/boutproject/BOUT-dev/master/examples/boutcore/blob2d.py /
 ADD simulation.ipynb /
 RUN mv /blob2d.py /simulation.ipynb ${HOME}
