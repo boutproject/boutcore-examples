@@ -19,9 +19,6 @@ RUN adduser --create-home \
 
 ADD https://raw.githubusercontent.com/boutproject/BOUT-dev/master/examples/boutcore/blob2d.py /
 RUN mv /blob2d.py ${HOME}
-RUN whoami
-RUN ls -la ${HOME}
-RUN $UID
 RUN chown ${USER} ${HOME} -R
 WORKDIR ${HOME}
 USER ${USER}
