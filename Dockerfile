@@ -1,6 +1,6 @@
 FROM registry.fedoraproject.org/fedora:latest
 # install the notebook package
-RUN dnf -y update && dnf -y install python3-notebook python3-bout++-openmpi && dnf -y clean all
+RUN dnf -y update && dnf -y install python3-notebook python3-bout++-openmpi python3-xbout && dnf -y clean all
 
 # create user with a home directory
 ARG NB_USER
