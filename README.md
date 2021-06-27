@@ -1,5 +1,5 @@
-# boutcore based on fedora
+# boutcore example based on Fedora 34
 
 [![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/dschwoerer/boutcore-examples/main)
 
-Currently for testing only ...
+For the PlasmaPy Hack Week
