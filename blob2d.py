@@ -1,15 +1,23 @@
 #!/bin/python3
 # -*- coding: utf-8
 
-#!##################################################################
+# #################################################################
 #
 #       2D blob simulations
 #
 #  Copyright:   NR Walkden, B Dudson, D Schwörer;  2012, 2017, 2018
 #
-###################################################################
+# #################################################################
 
-import boutcore as bc
+try:
+    import boutcore as bc
+except ImportError:
+    print(
+        """boutcore is not installed, or not in your
+PYTHONPATH. This can happen if the mpi module it has been
+installed for is not loaded."""
+    )
+    raise
 from numpy import sqrt
 from boutcore import bracket, DDZ, Delp2, PhysicsModel
 import sys
@@ -17,10 +25,23 @@ import os
 
 
 class Blob2D(PhysicsModel):
+    def __init__(self, mesh=None, n=None, omega=None, **kwargs):
+        self.mesh = mesh
+        self.n = n
+        self.omega = omega
+        if kwargs:
+            opts = bc.Options()
+            for k, v in kwargs.items():
+                opts.set(k, str(v), force=True)
+        PhysicsModel.__init__(self)
+
     def init(self, restart):
-        self.mesh = bc.Mesh.getGlobal()
-        self.n = bc.Field3D.fromMesh(self.mesh)
-        self.omega = bc.Field3D.fromMesh(self.mesh)
+        if self.mesh is None:
+            self.mesh = bc.Mesh.getGlobal()
+        if self.n is None:
+            self.n = bc.Field3D.fromMesh(self.mesh)
+        if self.omega is None:
+            self.omega = bc.Field3D.fromMesh(self.mesh)
 
         self.phiSolver = bc.Laplacian()
 
@@ -29,7 +50,7 @@ class Blob2D(PhysicsModel):
         Te0 = options.get("Te0", 30)
         e = options.get("e", 1.602e-19)
         m_i = options.get("m_i", 2 * 1.667e-27)
-        m_e = options.get("m_e", 9.11e-31)
+        # m_e = options.get("m_e", 9.11e-31)
 
         # Viscous diffusion coefficient
         self.D_vort = options.get("D_vort", 0)
@@ -77,21 +98,24 @@ class Blob2D(PhysicsModel):
             # BOUT.inp section "phiSolver"
             self.phiSolver = bc.Laplacian(bc.Options("phiSolver"))
 
-        # Starting guess for first solve (if iterative)
-        self.phi = bc.create3D("0")
-
         # /************ Tell BOUT++ what to solve ************/
 
         self.solve_for(n=self.n, omega=self.omega)
-        # model.save_repeat(phi=phi)
-        # model.save_once(rho_s=rho_s,c_s=c_s,Omega_i=Omega_i)
+
+        # Starting guess for first solve (if iterative)
+        self.phi = bc.create3D("0")
+
+        # Not jet supported, we can only add Fiel3D's to dump file
+        # bc.Datafile().add(rho_s=self.rho_s, c_s=c_s, Omega_i=Omega_i)
+        bc.Datafile().add(phi=self.phi, save_repeat=True)
 
     def rhs(self, time):
         # Run communications
         ######################################
         self.mesh.communicate(self.n, self.omega)
 
-        # Invert div(n grad(phi)) = grad(n) grad(phi) + n Delp_perp^2(phi) = omega
+        # Invert div(n grad(phi)) =
+        #            grad(n) grad(phi) + n Delp_perp^2(phi) = omega
         ######################################
         # Set the time derivative by adding/... to it
         # make sure to never overwrite it
@@ -101,12 +125,17 @@ class Blob2D(PhysicsModel):
         if not self.boussinesq:
             # Including full density in vorticit inversion
             # Update the 'C' coefficient. See invert_laplace.hxx
-            self.phiSolver.setCoefC(n)
+            self.phiSolver.setCoefC(self.n)
             # Use previous solution as guess
-            self.phi = self.phiSolver.solve(omega / n, self.phi)
+            phi = self.phiSolver.solve(self.omega / self.n, self.phi)
         else:
             # Background density only (1 in normalised units)
-            self.phi = self.phiSolver.solve(self.omega, self.phi)
+            phi = self.phiSolver.solve(self.omega, self.phi)
+
+        # Do not directly assign to self.phi, otherwise the old field
+        # is deleted and the new one is stored. That fails as we want
+        # to save self.phi
+        self.phi.set(phi.get())
 
         self.mesh.communicate(self.phi)
 
@@ -146,12 +175,12 @@ class Blob2D(PhysicsModel):
 
 
 # Ensure the blob folder exists
-def ensure_blob():
-    if not os.path.isdir("blob"):
-        print("Setting up folder blob for simulation ...")
-        os.mkdir("blob")
-    if not os.path.exists("blob/BOUT.inp"):
-        with open("blob/BOUT.inp", "w") as f:
+def ensure_blob(path="blob"):
+    if not os.path.isdir(path):
+        print(f"Setting up folder {path} for simulation ...")
+        os.mkdir(path)
+    if not os.path.exists(f"{path}/BOUT.inp"):
+        with open(f"{path}/BOUT.inp", "w") as f:
             f.write(
                 """\
 # settings file for BOUT++
