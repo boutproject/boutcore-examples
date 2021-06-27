@@ -10,6 +10,7 @@ ENV HOME /home/${NB_USER}
 
 # setup mpi
 ENV PYTHONPATH=/usr/lib64/python3.9/site-packages/openmpi
+ENV LD_LIBRARY_PATH=/usr/lib64/openmpi/lib
 
 RUN adduser --create-home \
     --comment "Default user" \
