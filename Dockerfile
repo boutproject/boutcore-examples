@@ -25,5 +25,7 @@ RUN mv /blob2d.py /*.ipynb ${HOME}
 RUN chown ${USER} ${HOME} -R
 WORKDIR ${HOME}
 USER ${USER}
+RUN python3 -m ensurepip
+RUN python3 -m pip install --upgrade animatplot
 
 
