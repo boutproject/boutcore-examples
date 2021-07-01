@@ -30,5 +30,5 @@ USER ${USER}
 RUN python3 -m ensurepip
 RUN python3 -m pip install --upgrade animatplot
 RUN echo 'please update the files!'
-COPY . .
+COPY --chown=${USER} . .
 RUN rm README.md Dockerfile
