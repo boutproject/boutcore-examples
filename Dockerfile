@@ -3,7 +3,7 @@ FROM registry.fedoraproject.org/fedora:latest
 RUN dnf -y update && dnf -y install python3-notebook python3-bout++-openmpi python3-xbout bout++-openmpi-devel python3-pip && dnf -y clean all
 
 # https://github.com/boutproject/BOUT-dev/pull/2360
-touch /usr/include/openmpi-x86_64/bout++/makefile.submodules
+RUN touch /usr/include/openmpi-x86_64/bout++/makefile.submodules
 
 # create user with a home directory
 ARG NB_USER
