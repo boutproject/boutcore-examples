@@ -1,2 +1,9 @@
 /.ipynb_checkpoints/
 /Untitled*.ipynb
+/blob2d
+/blob2d.o
+.BOUT.pid.*
+BOUT.dmp.*.nc
+BOUT.log.*
+BOUT.restart.*.nc
+BOUT.settings
