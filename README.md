@@ -1,5 +1,7 @@
-# boutcore example based on Fedora 34
+# BOUT++ example based on Fedora 34
 
-[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/dschwoerer/boutcore-examples/main)
+Python version: [![binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/dschwoerer/boutcore-examples/main)
+
+C++ version: [![binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/dschwoerer/boutcore-examples/bout)
 
 For the PlasmaPy Hack Week
