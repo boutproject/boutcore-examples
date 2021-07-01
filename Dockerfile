@@ -2,6 +2,8 @@ FROM registry.fedoraproject.org/fedora:latest
 # install the notebook package
 RUN dnf -y update && dnf -y install python3-notebook python3-bout++-openmpi python3-xbout bout++-openmpi-devel python3-pip && dnf -y clean all
 
+RUN dnf -y install /usr/lib/rpm/redhat/redhat-hardened-ld && dnf -y clean all
+
 # https://github.com/boutproject/BOUT-dev/pull/2360
 RUN touch /usr/include/openmpi-x86_64/bout++/makefile.submodules
 
@@ -15,6 +17,7 @@ ENV HOME /home/${NB_USER}
 ENV PYTHONPATH=/usr/lib64/python3.9/site-packages/openmpi
 ENV LD_LIBRARY_PATH=/usr/lib64/openmpi/lib
 ENV BOUT_TOP=/usr/include/openmpi-x86_64/bout++/
+ENV PATH=/usr/lib64/openmpi/bin:$PATH
 
 RUN adduser --create-home \
     --comment "Default user" \
