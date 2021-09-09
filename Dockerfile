@@ -22,6 +22,7 @@ RUN echo 'please update the files!'
 ADD blob2d.py /
 ADD *.ipynb /
 RUN mv /blob2d.py /*.ipynb ${HOME}
+ADD diffusion/BOUT.inp ${HOME}/diffusion/BOUT.inp
 RUN chown ${USER} ${HOME} -R
 WORKDIR ${HOME}
 USER ${USER}
