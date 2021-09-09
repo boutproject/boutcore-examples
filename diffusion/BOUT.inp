@@ -1,0 +1,23 @@
+nout = 100		# type: int, doc: Number of output steps
+timestep = 0.1
+
+[mesh]
+dx = Lx / (nx - 2*MXG)
+nx = 256 + 2*MXG
+ny = 1
+nz = 1
+MXG = 2 # x guards
+MYG = 0 # no y guards
+Lx = 1
+
+[mesh:ddx]
+first = c2		# type: string
+second = c2		# type: string
+upwind = w3		# type: string
+
+[n]
+function = 1 + height * exp(-((x-0.25)/width)^2)
+height = 0.5
+scale = 1.0
+width = 0.05
+bndry_all = dirichlet(1)
